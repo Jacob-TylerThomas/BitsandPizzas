@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.GridLayoutManager;
+import android.content.Intent;
 public class PizzaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -20,10 +21,18 @@ public class PizzaFragment extends Fragment {
         for (int i = 0; i < pizzaImages.length; i++) {
             pizzaImages[i] = Pizza.pizzas[i].getImageResourceId();
         }
-        CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(pizzaNames, pizzaImages);
+        CaptionedImagesAdapter adapter =
+                new CaptionedImagesAdapter(pizzaNames, pizzaImages);
         pizzaRecycler.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2); //change the 2 to a one for project 3
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         pizzaRecycler.setLayoutManager(layoutManager);
+        adapter.setListener(new CaptionedImagesAdapter.Listener() {
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), PizzaDetailActivity.class);
+                intent.putExtra(PizzaDetailActivity.EXTRA_PIZZA_ID, position);
+                getActivity().startActivity(intent);
+            }
+        });
         return pizzaRecycler;
     }
 }
